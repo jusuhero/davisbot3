@@ -16,17 +16,18 @@ intents.guild_reactions = True  # For assigning roles via reactions
 bot = commands.Bot(command_prefix=".", intents=intents)
 
 # Load cogs
-initial_extensions = ["cogs.music", "cogs.reactions"]
+initial_extensions = [
+    "cogs.music",
+    "cogs.advent_of_code",
+    "cogs.utils"
+]
 
-if __name__ == "__main__":
+async def setup_hook() -> None:
     for extension in initial_extensions:
-        bot.load_extension(
-            extension
-        )  # await it when cogs are ready (warning otherwise)
-
+        await bot.load_extension(extension)
 
 @bot.event
-async def on_ready():
+async def on_ready() -> None:
     print("---------------------------")
     print("Logged in")
     print("Username: ", end="")
@@ -39,4 +40,6 @@ async def on_ready():
     print("---------------------------")
 
 
-bot.run(DAVISBOT_TOKEN)
+if __name__ == "__main__":
+    bot.setup_hook = setup_hook
+    bot.run(DAVISBOT_TOKEN)
