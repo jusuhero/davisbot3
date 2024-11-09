@@ -26,11 +26,24 @@ class MusicCog(commands.Cog, description="Can play music from local files or You
             return False
         return True
 
+    @app_commands.command()
+    async def stop(self, interaction: discord.Interaction):
+        """
+        Stops playback and disconnects from channel.
+        """
+        self.voice_client.stop()
+        await self.voice_client.disconnect()
+        await interaction.response.send_message("Bis Baldrian!")
+
+
     @app_commands.command(name="yt", description="Playback audio from a youtube video.")
     @app_commands.describe(url="Youtube URL to play.")
     async def play_youtube(self, interaction: discord.Interaction, url: str):
         if not await self.join_voice(interaction):
             return
+        
+        # Defer interaction since loading might (and usually will) take longer than 3 seconds
+        await interaction.response.defer()
 
         # Use yt-dlp to get the direct audio URL
         ydl_opts = {"format": "bestaudio", "quiet": True}
@@ -39,7 +52,7 @@ class MusicCog(commands.Cog, description="Can play music from local files or You
                 info = ydl.extract_info(url, download=False)
                 audio_url = info["url"]
         except Exception as e:
-            await interaction.response.send_message(f"Error: {e}", ephemeral=True)
+            await interaction.followup.send(f"Error: {e}", ephemeral=True)
             return
 
         # Play audio in the voice channel
@@ -47,9 +60,7 @@ class MusicCog(commands.Cog, description="Can play music from local files or You
             discord.FFmpegPCMAudio(audio_url),
             after=lambda e: print(f"Finished playing: {e}"),
         )
-        await interaction.response.send_message(
-            f"Playing audio from {url}", ephemeral=True
-        )
+        await interaction.followup.send(f"Playing audio from {url}")
 
     @commands.command()
     async def super_command(self, ctx: commands.Context):
