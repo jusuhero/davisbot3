@@ -14,7 +14,6 @@ class AOCCog(commands.Cog, description="Advent of Code stuff"):
         pass
 
     async def leaderboard_update(self):
-        print(self.aoc_token)
         response = requests.get(self.json_link, cookies={"session": self.cookie})
         jsn_new = response.json()
 
