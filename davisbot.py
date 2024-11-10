@@ -46,5 +46,5 @@ class Davisbot(commands.Bot):
 
 
 if __name__ == "__main__":
-    bot = Davisbot(intents=intents)
+    bot = Davisbot(intents=intents, help_command=None)
     bot.run(DAVISBOT_TOKEN)
