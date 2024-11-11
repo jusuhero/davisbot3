@@ -5,12 +5,13 @@ from itertools import chain
 
 
 class HelpSelect(Select):
+    # Selection to let the user select a cog first to see help for.
     def __init__(self, bot):
         super().__init__(
             placeholder="Choose a category",
             options=[
                 discord.SelectOption(label=cog_name, description=cog.__doc__)
-                for cog_name, cog in bot.cogs.items()
+                for cog_name, cog in bot.cogs.items()  # Iterate over all available cogs and let the user select between them
             ],
         )
 
@@ -18,11 +19,14 @@ class HelpSelect(Select):
 
     async def callback(self, interaction: discord.Interaction):
         try:
+            # Gets the Cog that has been currently selected in the HelpSelect Select.
             cog = self.bot.get_cog(self.values[0])
             assert cog
 
+            # Gathers list of commands (normal and app_commands) - itertools.chain is used to generate one iterator instead of two for loops
             commands_list = list(chain(cog.walk_commands(), cog.walk_app_commands()))
 
+            # Send Embed of the available Commands in the selected cog.
             embed = discord.Embed(
                 title=f"{cog.__cog_name__} Commands",
                 description="\n".join(
