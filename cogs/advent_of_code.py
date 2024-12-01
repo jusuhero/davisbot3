@@ -14,7 +14,7 @@ User = namedtuple("User", ["username", "stars", "score"])
 class AOCCog(commands.Cog, description="Advent of Code stuff"):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_id = 915670668979347498
+        self.channel_id = 915670668979347498 #1312765325422624839
         self.year = 2024
         self.leaderboard_id = 1065710
         self.channel = None
@@ -41,9 +41,9 @@ class AOCCog(commands.Cog, description="Advent of Code stuff"):
 
     def get_new_members(self, old, new):
         new_members = []
-        for member in new["members"]:
+        for member, entry in new["members"].items():
             if member not in old["members"]:
-                new_members.append(member["name"])
+                new_members.append(entry["name"])
         return new_members
     
     def get_new_stars(self, old, new) -> list[Star]:
