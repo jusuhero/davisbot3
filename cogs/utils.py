@@ -52,7 +52,7 @@ class UtilsCog(commands.Cog, description="Provides utility and information funct
         await ctx.send(f"> Pong! {round(self.bot.latency * 1000)}ms")
 
     @commands.hybrid_command(
-        name="help",
+        name="davishelp",
         description="Shows a help section with a list of commands available in all cogs..",
     )
     async def help_function(self, ctx: commands.Context):
